@@ -1,0 +1,7 @@
+{
+  "dependencies": ["./arxiv_agent"],
+  "graphs": {
+    "agent": "./arxiv_agent/agent.py:graph"
+  },
+  "env": ".env"
+}
