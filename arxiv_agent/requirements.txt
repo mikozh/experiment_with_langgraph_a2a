@@ -1,3 +1,6 @@
 langgraph-api>=0.4.9
 openai
 langgraph-cli[inmem]
+arxiv
+langchain
+langchain_openai
