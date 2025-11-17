@@ -18,6 +18,8 @@ from arxiv_agent.utils.tools import search_for_publications_in_arxiv
 from langgraph.checkpoint.memory import MemorySaver
 from langchain_core.language_models import BaseChatModel
 from langchain_openai import ChatOpenAI
+from pydantic import BaseModel
+from typing import Literal
 
 
 class Context(TypedDict):
@@ -40,8 +42,19 @@ FORMAT_INSTRUCTION = (
     'Set response status to completed if the request is complete.'
 )
 
+class ResponseFormat(BaseModel):
+    """Respond to the user in this format.
+    Set response status to input_required if the user needs to provide more information to complete the request.
+    Set response status to error if there is an error while processing the request.
+    Set response status to completed if the request is complete.
+    """
+
+    status: Literal['input_required', 'completed', 'error'] = 'input_required'
+    message: str
+
 graph  = create_agent(
-            model=ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY")),
+            model=ChatOpenAI(client=AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))),
             tools=[search_for_publications_in_arxiv],
             system_prompt=SYSTEM_INSTRUCTION,
+    response_format=ResponseFormat,
     context_schema=Context)
