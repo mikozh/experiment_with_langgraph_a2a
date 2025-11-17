@@ -22,7 +22,7 @@ def search_for_publications_in_arxiv(search_string: str,
             num_retries=3)
         search = arxiv.Search(query=search_string,
                               sort_by=arxiv.SortCriterion.Relevance,
-                              sort_order=arxiv.SortOrder.Descending, max_results=100)
+                              sort_order=arxiv.SortOrder.Descending, max_results=50)
         results_generator = arxiv_client.results(search)
 
         result = []

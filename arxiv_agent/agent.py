@@ -36,11 +36,6 @@ SYSTEM_INSTRUCTION = (
     'Do not attempt to answer unrelated questions or use tools for other purposes.'
 )
 
-FORMAT_INSTRUCTION = (
-    'Set response status to input_required if the user needs to provide more information to complete the request.'
-    'Set response status to error if there is an error while processing the request.'
-    'Set response status to completed if the request is complete.'
-)
 
 class ResponseFormat(BaseModel):
     """Respond to the user in this format.
@@ -53,8 +48,11 @@ class ResponseFormat(BaseModel):
     message: str
 
 graph  = create_agent(
-            model=ChatOpenAI(client=AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))),
+            model=ChatOpenAI(client=AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY")),
+                             model="gpt-4o-2024-11-20"),
             tools=[search_for_publications_in_arxiv],
             system_prompt=SYSTEM_INSTRUCTION,
     response_format=ResponseFormat,
-    context_schema=Context)
+    context_schema=Context,
+    # checkpointer=MemorySaver()
+    )
